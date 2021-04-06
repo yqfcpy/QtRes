@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>438</width>
+    <height>372</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>438</width>
+    <height>372</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>438</width>
+    <height>372</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget{
+	font-size:16px;
+}</string>
+  </property>
+  <widget class="QComboBox" name="db_panel_server_cb">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>120</y>
+     <width>381</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="editable">
+    <bool>true</bool>
+   </property>
+   <property name="currentText">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="db_panel_server_lab_2">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>90</y>
+     <width>381</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="text">
+    <string>服务器地址</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="db_panel_port_lab">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>170</y>
+     <width>381</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="locale">
+    <locale language="Chinese" country="China"/>
+   </property>
+   <property name="text">
+    <string>端口号</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="db_panel_port_le">
+   <property name="geometry">
+    <rect>
+     <x>31</x>
+     <y>195</y>
+     <width>111</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>60</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="db_panel_info_lab">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>240</y>
+     <width>186</width>
+     <height>39</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>服务器连接状态状态</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="db_panel_conn_lab">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>240</y>
+     <width>30</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>30</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>30</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>300</y>
+     <width>381</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QPushButton" name="db_panel_yes_btn">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>确认</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="db_panel_test_btn">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>测试</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QLabel" name="db_panel_logo_lab">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>20</y>
+     <width>81</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>50</width>
+     <height>50</height>
+    </size>
+   </property>
+   <property name="text">
+    <string>Logo</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>db_panel_yes_btn</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>db_connect()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>141</x>
+     <y>303</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>146</x>
+     <y>365</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>db_panel_test_btn</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>db_test()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>409</x>
+     <y>349</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
+     <y>290</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>db_panel_server_cb</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>Form</receiver>
+   <slot>ok_btn_disable()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>285</x>
+     <y>142</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>285</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>db_connect()</slot>
+  <slot>db_test()</slot>
+  <slot>ok_btn_disable()</slot>
+ </slots>
+</ui>
