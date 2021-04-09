@@ -246,15 +246,31 @@
    <sender>db_panel_server_cb</sender>
    <signal>currentTextChanged(QString)</signal>
    <receiver>Form</receiver>
-   <slot>ok_btn_disable()</slot>
+   <slot>server_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>285</x>
-     <y>142</y>
+     <x>115</x>
+     <y>128</y>
     </hint>
     <hint type="destinationlabel">
-     <x>285</x>
-     <y>166</y>
+     <x>170</x>
+     <y>46</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>db_panel_port_le</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>Form</receiver>
+   <slot>port_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>74</x>
+     <y>202</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>222</x>
+     <y>194</y>
     </hint>
    </hints>
   </connection>
@@ -262,6 +278,7 @@
  <slots>
   <slot>db_connect()</slot>
   <slot>db_test()</slot>
-  <slot>ok_btn_disable()</slot>
+  <slot>server_changed()</slot>
+  <slot>port_changed()</slot>
  </slots>
 </ui>

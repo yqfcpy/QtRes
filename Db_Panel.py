@@ -1,16 +1,18 @@
-from PyQt5.QtCore import pyqtSignal, Qt, QThread
+import time
+
+from PyQt5.QtCore import pyqtSignal, Qt, QThread, QSettings
 from PyQt5.QtWidgets import QWidget, QApplication
 from resource.UI.db_panel import Ui_Form
-from resource.common.tools import CommonTools, RequestTools
+from resource.common.qfTools import RequestTools
 from resource.common.threadTools import RequestThread
-import asyncio, requests
 
 
 class DbPanel(QWidget,Ui_Form):
   # 登陆页面显示信号
   show_login_panel_signal = pyqtSignal()
-  # 数据库连接成功信号
-  getConnection_signal = pyqtSignal()
+  # 测试连接结束信号
+  connectionIsReady = pyqtSignal()
+
 
   def __init__(self,parent=None,*args,**kwargs):
     super().__init__(parent,*args,**kwargs)
@@ -18,85 +20,87 @@ class DbPanel(QWidget,Ui_Form):
 
   def init(self):
     self.setupUi(self) # 读取UI
-    self.loadConfig() # 读取配置文件
     self.getData() # 获取数据
-    self.loadLogicCode() # 读取业务逻辑
+    self.run() # 读取业务逻辑
 
-  def loadConfig(self):
-    self.settingFile = CommonTools.loadConfigFile()
-
+  def getConfigFile(self,setting):
+    pass
   def getData(self):
     pass
 
-  def loadLogicCode(self):
-    server = self.settingFile.value('server/server')
-    self.db_panel_server_cb.setCurrentText(server)
+
+
+  def run(self):
+    self.settingFile = QSettings("config.ini",QSettings.IniFormat)
+    self.settingRegedit = QSettings("yqfsoft","restaurant")
+
+    self.server = self.settingFile.value('server/server')
+    self.db_panel_server_cb.setCurrentText(self.server)
     self.db_panel_server_cb.lineEdit().selectAll()
-    port=self.settingFile.value('server/port')
-    self.db_panel_port_le.setText(port)
+    self.port=self.settingFile.value('server/port')
+    self.db_panel_port_le.setText(self.port)
+
+    self.serverList:set = self.settingRegedit.value('server_list')
+
+    self.connectionIsReady.connect(self.save_item_to_server_list)
+
+
 
   # 槽函数
   # 点击连接按钮的操作
   def db_connect(self):
-    try:
-      flag = RequestTools.getConnectionState()
-    except:
-      flag = False
-    if flag:
-      self.hide()
-      self.show_login_panel()
+    self.db_panel_yes_btn.setDisabled(True)
+    self.checkConnection()
 
 
   # 点击测试按钮的操作
   def db_test(self):
     self.db_panel_test_btn.setDisabled(True)
-    server = self.db_panel_server_cb.currentText()
-    port = self.db_panel_port_le.text()
-    if port == "":
-      url = "http://" + server
-    else:
-      url = "http://" + server + ":" + port
-    # url = "http://localhost:18080"
-    print(url)
-    self.server_state = RequestThread(url)
+    self.checkConnection()
+
+
+  # 服务器地址改变
+  def server_changed(self,server):
+    self.server = server
+
+  # 端口改变
+  def port_changed(self,port):
+    self.port = port
+
+  # 服务器检测
+  def checkConnection(self):
+    url = RequestTools.getServerUrl(self.server,self. port)
+    print("监测连接状态" + url)
+    self.serverStateThread = RequestThread(url)
     print("创建线程成功")
-    self.server_state.send_request_signal.connect(self.display_state)
-    self.server_state.end_request_signal.connect(self.reload_display_state)
-    self.server_state.start()
+    self.serverStateThread.send_request_signal.connect(self.display_state)
+    self.serverStateThread.start()
     print("开启线程")
 
-  def display_state(self,state):
-    print("显示",state)
-    if state == 200:
+  def display_state(self,state:bool):
+    if state:
       self.db_panel_conn_lab.setText("成功")
+      self.connectionIsReady.emit()
       print("成功")
     else:
       self.db_panel_conn_lab.setText("失败")
       print("失败")
-    self.db_panel_test_btn.setDisabled(False)
+    self.thread_finish()
 
-  def reload_display_state(self):
-    self.db_panel_conn_lab.setText("失败")
+  def thread_finish(self):
     self.db_panel_test_btn.setDisabled(False)
+    self.db_panel_yes_btn.setDisabled(False)
 
-  # 显示服务器状态
-  def send_connection_request(self):
-    res = requests.get("http://localhost:18080")
-    self.server_state = res.status_code
-    print(self.server_state)
+  def save_item_to_server_list(self):
+    saveItem = {"server":self.server,"port":self.port}
+    self.serverList.add(saveItem)
+    self.settingRegedit.setValue("server_list",self.serverList)
 
 
   # 显示登陆界面
   def show_login_panel(self):
     self.show_login_panel_signal.emit()
 
-
-  # 设置确定按钮不可用
-  def ok_btn_disable(self,content):
-    if content =="":
-      self.db_panel_yes_btn.setDisabled(True)
-    else:
-      self.db_panel_yes_btn.setDisabled(False)
 
   # 热键
   def keyPressEvent(self, event):

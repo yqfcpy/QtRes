@@ -1,30 +1,57 @@
-from PyQt5.QtCore import QTranslator
+from PyQt5.QtCore import QTranslator, Qt, QSettings, pyqtSignal
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication, QWidget, QSplashScreen
 from Db_Panel import DbPanel
 from Login_Panel import LoginPanel
-from resource.common.tools import RequestTools
+from resource.common.qfTools import RequestTools
+import sys, time
+
+
+class CurrentMethod:
+
+  # 配置文件的内容转换成字典
+  @staticmethod
+  def loadConfigFile(configFile:str = "config.ini", *args,**kwargs):
+    # 把配置文件中的变量赋值给传经来的窗口
+    pass
+
+  # 判定服务器连接界面和登录界面谁先显示
+  @staticmethod
+  def showInitPanel(dbPanel: QWidget, loginPanel: QWidget, configFile:str = "config.ini"):
+    url = RequestTools.getServerUrlFromConfig(configFile)
+    isReady = RequestTools.isServerConnected(url)
+    firstWindow = None
+    if isReady:
+      firstWindow = loginPanel
+    else:
+      firstWindow = dbPanel
+    return firstWindow
 
 # 程序入口文件
 if __name__ == '__main__':
-  import sys
 
   app = QApplication(sys.argv)
-
+  splash = QSplashScreen(QPixmap("./resource/img/systemicon/splash.jpg"))
+  splash.show()
+  app.processEvents()
+  splash.showMessage("loading style", Qt.AlignLeft | Qt.AlignBottom, Qt.red)
+  print("加载样式文件")
+  splash.showMessage("loading language", Qt.AlignLeft | Qt.AlignBottom, Qt.red)
+  print("加载多国语言")
+  splash.showMessage("loading config file", Qt.AlignLeft | Qt.AlignBottom, Qt.red)
+  print("加载配置文件")
+  splash.showMessage("loading UI file", Qt.AlignLeft | Qt.AlignBottom, Qt.red)
+  print("实例化界面")
   dbPanel = DbPanel()
   loginPanel = LoginPanel()
+  splash.showMessage("Start connecting to the server", Qt.AlignLeft | Qt.AlignBottom, Qt.red)
+  print("连接服务器")
+  window = CurrentMethod.showInitPanel(dbPanel,loginPanel)
 
-  try:
-    conn = RequestTools.getConnectionState()
-  except:
-    conn = False
 
-  if conn:
-    loginPanel.show()
-  else:
-    dbPanel.show()
+  splash.finish(window)
+  window.show()
 
-  # 槽
 
   # 信号
   # 显示登陆页面的信号

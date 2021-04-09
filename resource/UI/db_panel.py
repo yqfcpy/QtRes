@@ -87,7 +87,8 @@ class Ui_Form(object):
         self.retranslateUi(Form)
         self.db_panel_yes_btn.clicked.connect(Form.db_connect)
         self.db_panel_test_btn.clicked.connect(Form.db_test)
-        self.db_panel_server_cb.currentTextChanged['QString'].connect(Form.ok_btn_disable)
+        self.db_panel_server_cb.currentTextChanged['QString'].connect(Form.server_changed)
+        self.db_panel_port_le.textChanged['QString'].connect(Form.port_changed)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):

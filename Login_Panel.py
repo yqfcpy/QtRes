@@ -1,7 +1,6 @@
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget
 from resource.UI.login_panel import Ui_Form
-from resource.common.tools import CommonTools
 
 
 class LoginPanel(QWidget,Ui_Form):
@@ -13,25 +12,15 @@ class LoginPanel(QWidget,Ui_Form):
 
   def init(self):
     self.setupUi(self)  # 读取UI
-    self.loadConfig() # 读取配置文件
     self.getData()  # 获取数据
-    self.loadLogicCode()  # 读取业务逻辑
-    self.loadSignal()  # 监听信号和槽
-
-  def loadConfig(self):
-    pass
-
-  def loadConfig(self):
-    self.settingFile = CommonTools.loadConfigFile()
+    self.run()  # 读取业务逻辑
 
   def getData(self):
     pass
 
-  def loadLogicCode(self):
+  def run(self):
     pass
 
-  def loadSignal(self):
-    pass
 
   def show_db_panel(self):
     self.show_db_panel_signal.emit()
