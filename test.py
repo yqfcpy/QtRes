@@ -2,8 +2,9 @@ from PyQt5 import QtNetwork
 from PyQt5.QtCore import QDateTime, QUrl, QUrlQuery, QJsonDocument, QRegExp
 from PyQt5.QtGui import QIntValidator, QRegExpValidator
 from PyQt5.QtWidgets import QWidget, QPushButton, QApplication, QTextEdit, QLabel, QLineEdit
+
 from common.threadTools import TimeThread
-from common.qfTools import AsyncRequestTool
+from common.requestTools import AsyncRequest
 from common import logger
 import os
 
@@ -29,8 +30,6 @@ class MainWindow(QWidget):
     pattern = QRegExp('^([1-9]|[1-9]\\d{3}|[1-6][0-5][0-5][0-3][0-5])$')
     portValidator = QRegExpValidator(pattern)
     self.le.setValidator(portValidator)
-
-
     self.btn.clicked.connect(self.test6)
     self.timeTd.show_time_signal.connect(self.display_time)
 
@@ -38,10 +37,9 @@ class MainWindow(QWidget):
     self.te.setText(time1.toString("yyyy-MM-dd hh:mm:ss"))
     self.te.adjustSize()
   def test6(self):
-    log.info(str(False))
-    s = str(False)
-    if "0":
-      log.info("不应该运行到这里")
+    a1 = 0.111111111111111111111111
+    b1 = 0.111111111111111111111111
+    print(a1 + b1)
     return None
     dic = {"username": "admin", "password": 123456}
     path = QUrl("http://localhost:18080/user")
@@ -56,7 +54,7 @@ class MainWindow(QWidget):
     print(type(a), a)
 
   def test5(self):
-    self.sendTd = AsyncRequestTool()
+    self.sendTd = AsyncRequest()
     data = {"username": "admin", "password": "111111"}
     self.sendTd.post("http://localhost:18080/user/login", data)
     self.sendTd.getResult.connect(lambda s: print(s))

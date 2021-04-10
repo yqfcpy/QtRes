@@ -3,7 +3,7 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication, QWidget, QSplashScreen
 from Db_Panel import DbPanel
 from Login_Panel import LoginPanel
-from common.qfTools import SyncRequestTool
+from common.requestTools import SyncRequest
 import sys
 
 
@@ -15,8 +15,8 @@ def loadConfigFile(configFile:str = "config.ini", *args,**kwargs):
 
 # 判定服务器连接界面和登录界面谁先显示
 def showInitPanel(dbPanel: QWidget, loginPanel: QWidget, configFile:str = "config.ini"):
-  url = SyncRequestTool.getServerUrlFromConfig(configFile)
-  isReady = SyncRequestTool.isServerConnected(url)
+  url = SyncRequest.getServerUrlFromConfig(configFile)
+  isReady = SyncRequest.isServerConnected(url)
   firstWindow = None
   if isReady:
     firstWindow = loginPanel

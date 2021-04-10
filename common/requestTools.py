@@ -3,7 +3,7 @@ from PyQt5.QtCore import QSettings, QUrl, QJsonDocument, pyqtSignal, QObject, QU
 import json, requests
 
 
-class SyncRequestTool:
+class SyncRequest:
 
   # get请求
   @staticmethod
@@ -62,7 +62,7 @@ class SyncRequestTool:
         return False
 
 
-class AsyncRequestTool(QObject):
+class AsyncRequest(QObject):
   getResult = pyqtSignal(dict)
 
   def __init__(self):
