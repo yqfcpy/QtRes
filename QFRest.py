@@ -7,25 +7,22 @@ from common.qfTools import SyncRequestTool
 import sys
 
 
-class CurrentMethod:
 
-  # 配置文件的内容转换成字典
-  @staticmethod
-  def loadConfigFile(configFile:str = "config.ini", *args,**kwargs):
-    # 把配置文件中的变量赋值给传经来的窗口
-    pass
+# 配置文件的内容转换成字典
+def loadConfigFile(configFile:str = "config.ini", *args,**kwargs):
+  # 把配置文件中的变量赋值给传经来的窗口
+  pass
 
-  # 判定服务器连接界面和登录界面谁先显示
-  @staticmethod
-  def showInitPanel(dbPanel: QWidget, loginPanel: QWidget, configFile:str = "config.ini"):
-    url = SyncRequestTool.getServerUrlFromConfig(configFile)
-    isReady = SyncRequestTool.isServerConnected(url)
-    firstWindow = None
-    if isReady:
-      firstWindow = loginPanel
-    else:
-      firstWindow = dbPanel
-    return firstWindow
+# 判定服务器连接界面和登录界面谁先显示
+def showInitPanel(dbPanel: QWidget, loginPanel: QWidget, configFile:str = "config.ini"):
+  url = SyncRequestTool.getServerUrlFromConfig(configFile)
+  isReady = SyncRequestTool.isServerConnected(url)
+  firstWindow = None
+  if isReady:
+    firstWindow = loginPanel
+  else:
+    firstWindow = dbPanel
+  return firstWindow
 
 # 程序入口文件
 if __name__ == '__main__':
@@ -46,7 +43,7 @@ if __name__ == '__main__':
   loginPanel = LoginPanel()
   splash.showMessage("Start connecting to the server", Qt.AlignLeft | Qt.AlignBottom, Qt.red)
   print("连接服务器")
-  window = CurrentMethod.showInitPanel(dbPanel,loginPanel)
+  window = showInitPanel(dbPanel,loginPanel)
 
 
   splash.finish(window)

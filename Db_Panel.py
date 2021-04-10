@@ -1,5 +1,5 @@
 from PyQt5.QtCore import pyqtSignal, Qt, QSettings, QRegExp
-from PyQt5.QtGui import QIntValidator
+from PyQt5.QtGui import QIntValidator, QRegExpValidator
 from PyQt5.QtWidgets import QWidget, QApplication
 from resource.UI.db_panel import Ui_Form
 from common.qfTools import SyncRequestTool
@@ -40,7 +40,9 @@ class DbPanel(QWidget, Ui_Form):
 
     self.connectionIsReady.connect(self.save_item_to_server_list)
     # 验证
-    portValidator = QIntValidator(1, 65535)
+    # 设置端口范围 1-65535
+    pattern = QRegExp('^([1-9]|[1-9]\\d{3}|[1-6][0-5][0-5][0-3][0-5])$')
+    portValidator = QRegExpValidator(pattern)
     self.db_panel_port_le.setValidator(portValidator)
 
   # 槽函数

@@ -1,10 +1,11 @@
 from PyQt5 import QtNetwork
 from PyQt5.QtCore import QDateTime, QUrl, QUrlQuery, QJsonDocument, QRegExp
 from PyQt5.QtGui import QIntValidator, QRegExpValidator
-from PyQt5.QtWidgets import QWidget, QPushButton, QApplication, QTextEdit
+from PyQt5.QtWidgets import QWidget, QPushButton, QApplication, QTextEdit, QLabel, QLineEdit
 from common.threadTools import TimeThread
 from common.qfTools import AsyncRequestTool
 from common import logger
+import os
 
 log = logger.loggerConfig()
 
@@ -16,32 +17,40 @@ class MainWindow(QWidget):
     self.btn.resize(60, 40)
     self.btn.move(340, 360)
     self.btn.setText("测试")
-    self.te = QTextEdit(self)
-    self.te.resize(400, 340)
+    self.te = QLabel(self)
+    self.le = QLineEdit(self)
+    self.le.move(0,20)
+
     # self.setting = QSettings("cctv.dat",QSettings.InvalidFormat
     self.timeTd = TimeThread()
     self.timeTd.start()
 
+    # 正则表达式
+    pattern = QRegExp('^([1-9]|[1-9]\\d{3}|[1-6][0-5][0-5][0-3][0-5])$')
+    portValidator = QRegExpValidator(pattern)
+    self.le.setValidator(portValidator)
 
 
     self.btn.clicked.connect(self.test6)
     self.timeTd.show_time_signal.connect(self.display_time)
 
   def display_time(self, time1: QDateTime):
-    self.te.setPlainText(time1.toString("yyyy-MM-dd hh:mm:ss"))
-
+    self.te.setText(time1.toString("yyyy-MM-dd hh:mm:ss"))
+    self.te.adjustSize()
   def test6(self):
-    log.info("11111")
+    log.info(str(False))
+    s = str(False)
+    if "0":
+      log.info("不应该运行到这里")
     return None
     dic = {"username": "admin", "password": 123456}
     path = QUrl("http://localhost:18080/user")
     query = QUrlQuery()
     if 1 != 2:
       for item in dic.items():
-        self.logger.info(item[0], item[1])
-        query.addQueryItem(str(item[0]), str(item[1]))
+        query.addQueryItem(item[0], item[1])
       path.setQuery(query.query())
-      self.logger.info(path)
+    log.info(path)
 
   def fun(self, a: int):
     print(type(a), a)
