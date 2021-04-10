@@ -1,10 +1,12 @@
 from PyQt5 import QtNetwork
-from PyQt5.QtCore import QSettings, QDateTime, QUrl, QUrlQuery, QByteArray, QJsonDocument
+from PyQt5.QtCore import QDateTime, QUrl, QUrlQuery, QJsonDocument, QRegExp
+from PyQt5.QtGui import QIntValidator, QRegExpValidator
 from PyQt5.QtWidgets import QWidget, QPushButton, QApplication, QTextEdit
+from common.threadTools import TimeThread
+from common.qfTools import AsyncRequestTool
+from common import logger
 
-from resource.common.threadTools import TimeThread
-from resource.common.qfTools import RequestAsyncTool
-
+log = logger.loggerConfig()
 
 class MainWindow(QWidget):
   def __init__(self, parent=None, *args, **kwargs):
@@ -16,10 +18,11 @@ class MainWindow(QWidget):
     self.btn.setText("测试")
     self.te = QTextEdit(self)
     self.te.resize(400, 340)
-    # self.setting = QSettings("cctv.dat",QSettings.InvalidFormat)
-
+    # self.setting = QSettings("cctv.dat",QSettings.InvalidFormat
     self.timeTd = TimeThread()
     self.timeTd.start()
+
+
 
     self.btn.clicked.connect(self.test6)
     self.timeTd.show_time_signal.connect(self.display_time)
@@ -28,21 +31,23 @@ class MainWindow(QWidget):
     self.te.setPlainText(time1.toString("yyyy-MM-dd hh:mm:ss"))
 
   def test6(self):
-    dic = {"username":"admin","password":123456}
+    log.info("11111")
+    return None
+    dic = {"username": "admin", "password": 123456}
     path = QUrl("http://localhost:18080/user")
     query = QUrlQuery()
-    if 1 != 2 :
+    if 1 != 2:
       for item in dic.items():
-        print(item[0], item[1])
+        self.logger.info(item[0], item[1])
         query.addQueryItem(str(item[0]), str(item[1]))
       path.setQuery(query.query())
-      print(path)
+      self.logger.info(path)
 
   def fun(self, a: int):
     print(type(a), a)
 
   def test5(self):
-    self.sendTd = RequestAsyncTool()
+    self.sendTd = AsyncRequestTool()
     data = {"username": "admin", "password": "111111"}
     self.sendTd.post("http://localhost:18080/user/login", data)
     self.sendTd.getResult.connect(lambda s: print(s))

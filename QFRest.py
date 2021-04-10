@@ -1,10 +1,10 @@
-from PyQt5.QtCore import QTranslator, Qt, QSettings, pyqtSignal
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication, QWidget, QSplashScreen
 from Db_Panel import DbPanel
 from Login_Panel import LoginPanel
-from resource.common.qfTools import RequestTools
-import sys, time
+from common.qfTools import SyncRequestTool
+import sys
 
 
 class CurrentMethod:
@@ -18,8 +18,8 @@ class CurrentMethod:
   # 判定服务器连接界面和登录界面谁先显示
   @staticmethod
   def showInitPanel(dbPanel: QWidget, loginPanel: QWidget, configFile:str = "config.ini"):
-    url = RequestTools.getServerUrlFromConfig(configFile)
-    isReady = RequestTools.isServerConnected(url)
+    url = SyncRequestTool.getServerUrlFromConfig(configFile)
+    isReady = SyncRequestTool.isServerConnected(url)
     firstWindow = None
     if isReady:
       firstWindow = loginPanel

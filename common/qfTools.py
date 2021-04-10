@@ -3,7 +3,7 @@ from PyQt5.QtCore import QSettings, QUrl, QJsonDocument, pyqtSignal, QObject, QU
 import json, requests
 
 
-class RequestSyncTool:
+class SyncRequestTool:
 
   # get请求
   @staticmethod
@@ -62,7 +62,7 @@ class RequestSyncTool:
         return False
 
 
-class RequestAsyncTool(QObject):
+class AsyncRequestTool(QObject):
   getResult = pyqtSignal(dict)
 
   def __init__(self):
@@ -75,7 +75,7 @@ class RequestAsyncTool(QObject):
     if param != None:
       query = QUrlQuery()
       for item in param.items():
-        query.addQueryItem(str(item[0]), str(item[1]))
+        query.addQueryItem(item[0], str(item[1]))
       url.setQuery(query.query())
     self.nam = QtNetwork.QNetworkAccessManager()
     self.nam.finished.connect(self.handleResponse)
@@ -89,7 +89,7 @@ class RequestAsyncTool(QObject):
     if param != None:
       queryParams = QUrlQuery()
       for item in param.items():
-        queryParams.addQueryItem(str(item[0]), str(item[1]))
+        queryParams.addQueryItem(item[0], str(item[1]))
       url.setQuery(queryParams.query())
     # 设置头信息是json这里可以不写
     # req.setHeader(QtNetwork.QNetworkRequest.ContentTypeHeader, "application/json")
