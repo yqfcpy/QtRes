@@ -1,15 +1,15 @@
 from PyQt5.QtCore import pyqtSignal, Qt, QSettings, QRegExp
-from PyQt5.QtGui import QIntValidator, QRegExpValidator
 from PyQt5.QtWidgets import QWidget, QApplication
 from resource.UI.db_panel import Ui_Form
-from common.requestTools import SyncRequest
+from common.requestTools import SyncRequest, AsyncRequest
 from common.regExpTools import RegExpValidator
+from common import logger
+
+log = logger.loggerConfig()
 
 class DbPanel(QWidget, Ui_Form):
   # 登陆页面显示信号
   show_login_panel_signal = pyqtSignal()
-  # 测试连接结束信号
-  connectionIsReady = pyqtSignal()
 
   def __init__(self, parent=None, *args, **kwargs):
     super().__init__(parent, *args, **kwargs)
@@ -17,16 +17,10 @@ class DbPanel(QWidget, Ui_Form):
 
   def init(self):
     self.setupUi(self)  # 读取UI
-    self.getData()  # 获取数据
     self.run()  # 读取业务逻辑
 
-  def getConfigFile(self, setting):
-    pass
-
-  def getData(self):
-    pass
-
   def run(self):
+    self.setWindowTitle("服务器连接")
     self.settingFile = QSettings("config.ini", QSettings.IniFormat)
     self.settingRegedit = QSettings("yqfsoft", "restaurant")
 
@@ -38,7 +32,6 @@ class DbPanel(QWidget, Ui_Form):
 
     self.serverList: set = self.settingRegedit.value('server_list')
 
-    self.connectionIsReady.connect(self.save_item_to_server_list)
     # 验证
     # 设置端口范围 1-65535
     self.db_panel_port_le.setValidator(RegExpValidator.getPortValidator())
@@ -49,12 +42,12 @@ class DbPanel(QWidget, Ui_Form):
   # 点击连接按钮的操作
   def db_connect(self):
     self.db_panel_yes_btn.setDisabled(True)
-    self.checkConnection()
+    self.getTestConnection(1)
 
   # 点击测试按钮的操作
   def db_test(self):
     self.db_panel_test_btn.setDisabled(True)
-    self.checkConnection()
+    self.getTestConnection(2)
 
   # 服务器地址改变
   def server_changed(self, server):
@@ -64,23 +57,43 @@ class DbPanel(QWidget, Ui_Form):
   def port_changed(self, port):
     self.port = port
 
-  # 服务器检测
-  def checkConnection(self):
-    url = SyncRequestTool.getServerUrl(self.server, self.port)
+  # 服务器检测 枚举 1是点击确定运行的方法 2是点击测试运行的方法
+  def getTestConnection(self,runNum:int):
+    url = SyncRequest.getServerUrl(self.server, self.port)
+    log.info(url)
+    self.request = AsyncRequest()
+    res = self.request.get(url)
+    if runNum == 1:
+      self.request.getResult.connect(self.clickBtnYesToDo)
+    else:
+      self.request.getResult.connect(self.clickBtnTestToDo)
 
-  def display_state(self, state: bool):
-    if state:
+  def clickBtnYesToDo(self,state):
+    log.info(state)
+    if state['code'] != 0:
       self.db_panel_conn_lab.setText("成功")
-      self.connectionIsReady.emit()
-      print("成功")
+      self.db_panel_conn_lab.setStyleSheet('color:green;')
+      self.close()
+      self.show_login_panel_signal.emit()
+      log.info("成功")
     else:
       self.db_panel_conn_lab.setText("失败")
-      print("失败")
-    self.thread_finish()
-
-  def thread_finish(self):
-    self.db_panel_test_btn.setDisabled(False)
+      self.db_panel_conn_lab.setStyleSheet('color:red;')
+      log.info("失败")
     self.db_panel_yes_btn.setDisabled(False)
+
+
+  def clickBtnTestToDo(self, state):
+    log.info(state)
+    if state['code'] != 0:
+      self.db_panel_conn_lab.setText("成功")
+      self.db_panel_conn_lab.setStyleSheet('color:green;')
+      log.info("成功")
+    else:
+      self.db_panel_conn_lab.setText("失败")
+      self.db_panel_conn_lab.setStyleSheet('color:red;')
+      log.info("失败")
+    self.db_panel_test_btn.setDisabled(False)
 
   def save_item_to_server_list(self):
     saveItem = {"server": self.server, "port": self.port}

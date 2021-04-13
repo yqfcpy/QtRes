@@ -43,7 +43,7 @@ dictConfig = {
     # 打印到文件的
     'default': {
       'formatter': 'standard',
-      'level': 'DEBUG',
+      'level': 'WARNING',
       'class': 'logging.handlers.RotatingFileHandler',
       # 日志文件的路径
       'filename': logFile_path,

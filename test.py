@@ -1,3 +1,5 @@
+import time
+
 from PyQt5 import QtNetwork
 from PyQt5.QtCore import QDateTime, QUrl, QUrlQuery, QJsonDocument, QRegExp
 from PyQt5.QtGui import QIntValidator, QRegExpValidator
@@ -36,6 +38,7 @@ class MainWindow(QWidget):
   def display_time(self, time1: QDateTime):
     self.te.setText(time1.toString("yyyy-MM-dd hh:mm:ss"))
     self.te.adjustSize()
+
   def test6(self):
     a1 = 0.111111111111111111111111
     b1 = 0.111111111111111111111111

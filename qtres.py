@@ -1,3 +1,5 @@
+__author__ = 'Oscar Yang Liu'
+
 from PyQt5.QtCore import QPropertyAnimation, QAbstractAnimation, QSettings
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit
 
