@@ -1,5 +1,5 @@
 from PyQt5.QtCore import pyqtSignal, Qt, QSettings, QRegExp
-from PyQt5.QtWidgets import QWidget, QApplication
+from PyQt5.QtWidgets import QWidget, QApplication, QLineEdit
 from resource.UI.db_panel import Ui_Form
 from common.requestTools import SyncRequest, AsyncRequest
 from common.regExpTools import RegExpValidator
@@ -32,9 +32,12 @@ class DbPanel(QWidget, Ui_Form):
 
     self.serverList: set = self.settingRegedit.value('server_list')
 
+
+
     # 验证
     # 设置端口范围 1-65535
     self.db_panel_port_le.setValidator(RegExpValidator.getPortValidator())
+
 
 
 
@@ -104,8 +107,15 @@ class DbPanel(QWidget, Ui_Form):
   def show_login_panel(self):
     self.show_login_panel_signal.emit()
 
+
+
   # 热键
   def keyPressEvent(self, event):
     super().keyPressEvent(event)
-    if event.key() == Qt.Key_F1 and QApplication.keyboardModifiers() == Qt.ControlModifier:
-      self.db_connect()
+    if self.db_panel_server_cb.hasFocus():
+      if event.key() == Qt.Key_Return or event.key() == Qt.Key_Enter:
+        self.db_panel_port_le.setFocus()
+        self.db_panel_port_le.selectAll()
+    elif self.db_panel_port_le.hasFocus():
+      if event.key() == Qt.Key_Return or event.key() == Qt.Key_Enter:
+        self.db_connect()

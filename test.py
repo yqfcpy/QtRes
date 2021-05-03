@@ -1,3 +1,4 @@
+import socket
 import time
 
 from PyQt5 import QtNetwork
@@ -32,12 +33,18 @@ class MainWindow(QWidget):
     pattern = QRegExp('^([1-9]|[1-9]\\d{3}|[1-6][0-5][0-5][0-3][0-5])$')
     portValidator = QRegExpValidator(pattern)
     self.le.setValidator(portValidator)
-    self.btn.clicked.connect(self.test6)
+    self.btn.clicked.connect(self.test7)
     self.timeTd.show_time_signal.connect(self.display_time)
 
   def display_time(self, time1: QDateTime):
     self.te.setText(time1.toString("yyyy-MM-dd hh:mm:ss"))
     self.te.adjustSize()
+
+  def test7(self):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(('www.baidu.com', 80))
+    print(s.)
+    s.close()
 
   def test6(self):
     a1 = 0.111111111111111111111111

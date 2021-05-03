@@ -71,12 +71,12 @@ class AsyncRequest(QObject):
   def get(self, url: str, param: dict = None):
     # 创建一个请求
     path = QUrl(url)
-    req = QtNetwork.QNetworkRequest(path)
     if param != None:
       query = QUrlQuery()
       for item in param.items():
         query.addQueryItem(item[0], str(item[1]))
-      url.setQuery(query.query())
+      path.setQuery(query.query())
+    req = QtNetwork.QNetworkRequest(path)  
     self.nam = QtNetwork.QNetworkAccessManager()
     self.nam.finished.connect(self.handleResponse)
     # 使用get请求 如果有参数的话 写一个data 放到get里
@@ -85,12 +85,12 @@ class AsyncRequest(QObject):
   def post(self, url: str, jsonBody: dict, param: dict = None):
     path = QUrl(url)
     sendData = QJsonDocument(jsonBody)
-    req = QtNetwork.QNetworkRequest(path)
     if param != None:
       queryParams = QUrlQuery()
       for item in param.items():
         queryParams.addQueryItem(item[0], str(item[1]))
-      url.setQuery(queryParams.query())
+      path.setQuery(queryParams.query())
+    req = QtNetwork.QNetworkRequest(path)  
     # 设置头信息是json这里可以不写
     # req.setHeader(QtNetwork.QNetworkRequest.ContentTypeHeader, "application/json")
     self.nam = QtNetwork.QNetworkAccessManager()
